@@ -83,7 +83,7 @@ tr {
 
 .label{
   border-radius: 50px;
-  border: solid 1pt;
+  border: solid 2pt;
   text-align: center;
   padding: 2pt;
   cursor: pointer;
