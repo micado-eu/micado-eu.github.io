@@ -1,5 +1,5 @@
 body{
-  font-family: Quicksand;
+  font-family: Nunito;
 }
 
 h1{
@@ -52,6 +52,23 @@ tr {
 .loadmorediv{
 }
 
+.tooltipdiv{
+  position: fixed;
+  background: white;
+  border: black solid 1pt;
+  padding: 2pt;
+  border-radius: 3px;
+  /* top: 50px;
+  left: 300px; */
+  /* width: 200px;
+  height: 30px; */
+}
+
+.tooltip_content{
+
+}
+
+
 .loadmore{
   cursor: pointer;
   width: 100%;
@@ -69,4 +86,9 @@ tr {
   border: black solid 1pt;
   text-align: center;
   padding: 2pt;
+  cursor: pointer;
+}
+
+.invisible{
+  display: none;
 }

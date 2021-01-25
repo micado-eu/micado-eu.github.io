@@ -16,6 +16,11 @@ function createissuetable(id){
   loadmorediv.id="loadmorediv";
   loadmorediv.classList.add("loadmorediv");
 
+  var tooltipdiv = contentdiv.appendChild(document.createElement("div"));
+  tooltipdiv.id="tooltipdiv";
+  tooltipdiv.classList.add("tooltipdiv");
+  tooltipdiv.classList.add("invisible")
+
 
   var selectform = selectdiv.appendChild(document.createElement("select"));
   selectform.id="selectform";
@@ -79,7 +84,7 @@ function createissuetable(id){
 
   function appendtable(q,page){
     //Define how many results should be loaded per query
-    var perpage=30;
+    var perpage=100;
     //Link to the repository
     var repolink = "https://api.github.com/repos/micado-eu/REPONAME/issues?state=all&per_page=PERPAGE&page=".replace("REPONAME",q).replace("PERPAGE",perpage)+page
 
@@ -166,6 +171,20 @@ function createissuetable(id){
             label.classList.add("label");
             label.innerHTML=item.name;
             label.style.backgroundColor="#"+item.color;
+            label.addEventListener("mouseover",function(){
+              tooltipdiv.classList.remove("invisible")
+              tooltip_content=tooltipdiv.appendChild(document.createElement("div"));
+              tooltip_content.innerHTML=item.description;
+              tooltipdiv.style.left=event.clientX+"px";
+              tooltipdiv.style.top=event.clientY+"px";
+
+            })
+            label.addEventListener("mouseout",function(){
+              tooltipdiv.innerHTML="";
+              tooltipdiv.classList.add("invisible")
+            })
+
+
             if (Object.keys(labelcats).includes(item.name)){
               curr_row.childNodes[getindex(labelcats[item.name])].appendChild(label)
             }
