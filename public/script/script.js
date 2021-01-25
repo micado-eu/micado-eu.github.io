@@ -88,8 +88,6 @@ function createissuetable(id){
       "Antwerp":"city",
       "Bologna":"city",
       "Madrid":"city",
-      "enhancement":"city",
-      "help wanted":"city",
       "UX":"feature",
       "general":"feature",
       "migration situation monitor":"feature",
