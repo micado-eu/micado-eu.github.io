@@ -1,0 +1,72 @@
+body{
+  font-family: Quicksand;
+}
+
+h1{
+}
+
+table{
+  border: 1pt black;
+}
+
+th{
+  position: sticky;
+  top: 0;
+  background: white;
+  font-weight: bold;
+}
+
+td {
+	max-width: 300px;
+	padding: 3px;
+  outline: 1px #f7f7f7 solid;
+}
+
+td.closed{
+  background: #de8585;
+}
+
+td.open{
+  background: #9ade85;
+}
+
+tr:hover{
+  background-color: #f7f7f7;
+}
+
+tr {
+	outline: 1pt black solid;
+}
+
+.content{
+  /* border: 1pt black dashed; */
+  width: 100%;
+}
+
+.tablediv{
+}
+
+.selectdiv{
+}
+
+.loadmorediv{
+}
+
+.loadmore{
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  border: 2pt black solid;
+  padding: 2pt;
+}
+
+.loadmore:hover{
+  background: #f0f0f0;
+}
+
+.label{
+  border-radius: 5px;
+  border: black solid 1pt;
+  text-align: center;
+  padding: 2pt;
+}
