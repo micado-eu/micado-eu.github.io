@@ -170,7 +170,7 @@ function createissuetable(id){
             let label = document.createElement("div")
             label.classList.add("label");
             label.innerHTML=item.name;
-            label.style.backgroundColor="#"+item.color;
+            label.style.borderColor="#"+item.color;
             label.addEventListener("mouseover",function(){
               tooltipdiv.classList.remove("invisible")
               tooltip_content=tooltipdiv.appendChild(document.createElement("div"));

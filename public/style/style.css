@@ -82,8 +82,8 @@ tr {
 }
 
 .label{
-  border-radius: 5px;
-  border: black solid 1pt;
+  border-radius: 50px;
+  border: solid 1pt;
   text-align: center;
   padding: 2pt;
   cursor: pointer;
