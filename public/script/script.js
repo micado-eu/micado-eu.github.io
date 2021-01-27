@@ -12,9 +12,6 @@ function createissuetable(id){
   tablediv.id="tablediv";
   tablediv.classList.add("tablediv");
 
-  var loadmorediv = contentdiv.appendChild(document.createElement("div"));
-  loadmorediv.id="loadmorediv";
-  loadmorediv.classList.add("loadmorediv");
 
   var tooltipdiv = contentdiv.appendChild(document.createElement("div"));
   tooltipdiv.id="tooltipdiv";
@@ -26,10 +23,15 @@ function createissuetable(id){
   selectform.id="selectform";
   selectform.value="pa_application"
 
-  page=1;
+  var filterdiv = contentdiv.appendChild(document.createElement("div"));
+  filterdiv.id="filterdiv";
+  filterdiv.classList.add("filterdiv");
+  filterdiv.classList.add("invisible");
 
-  // var heads=["Id","Title","Raised by","Created","Last update","Assignee(s)","Cities","Feature","Criticality","Labels","Status"];
-  // var heads = []
+  page=1;
+  var labeldict=new Object()
+  var labelcollection=new Object()
+
   var heads={
     "id":"ID",
     "title":"Title",
@@ -40,7 +42,6 @@ function createissuetable(id){
     "city":"Cities",
     "feature":"Feature",
     "relevance":"Relevance",
-    "essential":"Essential",
     "other_labels":"Other labels",
     "status":"Status"
     }
@@ -51,20 +52,48 @@ function createissuetable(id){
   button.innerHTML="Get Issues";
   button.addEventListener("click",function(){
     tablediv.innerHTML="";
-    loadmorediv.innerHTML="";
     issuetable = tablediv.appendChild(document.createElement("table"));
     appendtable(selectform.value,page);
     createheads(heads)});
 
   //Table set up, start querying
 
+  function generatefilter (head){
+    console.log(labelcollection)
+    console.log(labeldict)
+    console.log(labelcollection[head.target.id])
+    // let rows = document.getElementsByTagName("tr");
+    // // console.log(rows)
+    // let filtercats = new Set();
+    //
+    // for (var i in rows){
+    //   if (rows[i].childNodes != undefined){
+    //     let labels = rows[i].childNodes[7].childNodes;
+    //     for (var l in labels){
+    //       let label = labels[l].innerHTML
+    //       if (label != undefined){
+    //         filtercats.add(label)
+    //       }
+    //     }
+    //
+    //   }
+    // }
+    //
+    // console.log(filtercats)
 
 
-    //Creating table heads
+  }
+
+  //   //Creating table heads
     function createheads(heads){
       var tablehead = issuetable.appendChild(document.createElement("tr"));
       for (head in heads){
-        tablehead.appendChild(document.createElement("th")).innerHTML=heads[head];
+        let entry = document.createElement("th")
+        entry.id=head;
+        entry.innerHTML=heads[head];
+        entry.addEventListener("click",function(head){generatefilter(head)})
+        tablehead.appendChild(entry);
+        labelcollection[head]=new Set()
       }
     }
 
@@ -105,10 +134,12 @@ function createissuetable(id){
       "glossary":"feature",
       "chatbot":"feature",
       "app settings":"feature",
+      "my documents":"feature",
+      "integration plan":"feature",
+      "validations":"feature",
       "WP4":"relevance",
       "WP5":"relevance",
       "LESC":"relevance",
-      "essential":"essential"
     }
 
 
@@ -134,6 +165,7 @@ function createissuetable(id){
           let curr_row = issuetable.appendChild(document.createElement("tr"));
           let rowdata = rows[row];
 
+
           Object.keys(heads).forEach(initrows)
 
 
@@ -150,7 +182,6 @@ function createissuetable(id){
             return Object.keys(heads).indexOf(lookup);
           }
 
-          // console.log(Object.keys(heads).indexOf("title"))
 
           populatecell(getindex("id"),"<a href="+rowdata.html_url+" target='_blank' >"+rowdata.number+"</a>")
           populatecell(getindex("title"),rowdata.title);
@@ -167,10 +198,15 @@ function createissuetable(id){
 
           labels.forEach(assignlabels);
           function assignlabels(item,index,arr){
+
+            labeldict[item.node_id]=item.name
+
             let label = document.createElement("div")
-            label.classList.add("label");
+            label.classList.add("label",item.node_id);
             label.innerHTML=item.name;
             label.style.borderColor="#"+item.color;
+
+            //create toolt
             label.addEventListener("mouseover",function(){
               tooltipdiv.classList.remove("invisible")
               tooltip_content=tooltipdiv.appendChild(document.createElement("div"));
@@ -186,10 +222,12 @@ function createissuetable(id){
 
 
             if (Object.keys(labelcats).includes(item.name)){
+              labelcollection[labelcats[item.name]].add(item.node_id)
               curr_row.childNodes[getindex(labelcats[item.name])].appendChild(label)
             }
             else{
               curr_row.childNodes[getindex("other_labels")].appendChild(label)
+              labelcollection["other_labels"].add(item.node_id)
             }
           }
 
@@ -212,10 +250,6 @@ function createissuetable(id){
       if (responseObj.length>=perpage){
         page=page+1;
         appendtable(selectform.value,page)
-        // var loadmore = loadmorediv.appendChild(document.createElement("div"));
-        // var loadmoretext = loadmore.appendChild(document.createElement("p")).innerHTML="load more";
-        // loadmore.classList.add("loadmore");
-        // loadmore.addEventListener("click",function(){page=page+1;loadmorediv.innerHTML=""; appendtable(selectform.value,page)})
       }
 
 
