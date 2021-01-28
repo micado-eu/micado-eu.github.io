@@ -16,12 +16,12 @@ function createissuetable(id){
   var tooltipdiv = contentdiv.appendChild(document.createElement("div"));
   tooltipdiv.id="tooltipdiv";
   tooltipdiv.classList.add("tooltipdiv");
-  tooltipdiv.classList.add("invisible")
+  tooltipdiv.classList.add("invisible");
 
 
   var selectform = selectdiv.appendChild(document.createElement("select"));
   selectform.id="selectform";
-  selectform.value="pa_application"
+  selectform.value="pa_application";
 
   var filterdiv = contentdiv.appendChild(document.createElement("div"));
   filterdiv.id="filterdiv";
@@ -31,8 +31,6 @@ function createissuetable(id){
   page=1;
   //links the label codes to the label names
   var labeldict=new Object()
-  labeldict["open"]="open";
-  labeldict["closed"]="closed";
   //categorises labels
   var labelcollection=new Object()
   //contains the features that contain the class appendinvisible
@@ -65,11 +63,16 @@ function createissuetable(id){
   //Table set up, start querying
 
   function appendinvisible(inp){
+
+
     if (invisiblelabels.has(inp)){
       invisiblelabels.delete(inp);
     } else {
       invisiblelabels.add(inp)
     }
+
+    console.log(invisiblelabels)
+
     toggleinvisble()
   }
 
@@ -99,10 +102,19 @@ function createissuetable(id){
   }
 
   function generatefilter (head){
+
+    var cells = document.getElementsByClassName("entry "+head.target.id);
+    let labelset = new Set();
+
+    for(var c=0; c<cells.length; c++){
+      labelset.add(cells[c].getAttribute("entryid"))
+    }
+
+    // let labels = Array.from(labelcollection[head.target.id]);
+    let labels = Array.from(labelset)
+
+    //Setting up filterdiv
     filterdiv.classList.remove("invisible");
-    let labels = Array.from(labelcollection[head.target.id]);
-    labels.push("empty_"+head.target.id)
-    labeldict["empty_"+head.target.id]="empty";
     filterdiv.innerHTML="";
     var filterwindow = document.createElement("div");
     var closebar = document.createElement("div");
@@ -113,16 +125,20 @@ function createissuetable(id){
     closebar.appendChild(closebarx)
     filterdiv.appendChild(closebar)
     closebar.addEventListener("click",function(){filterdiv.innerHTML="";filterdiv.classList.add("invisible")})
-
     filterdiv.appendChild(filterwindow);
     filterdiv.style.left=event.clientX+"px";
     filterdiv.style.top=event.clientY+"px";
+
+    //Filterdiv set up
+    //Generating content
+    labeldict["empty"]="empty"
+
     var list = document.createElement("ul");
     for (l in labels){
       let entry = document.createElement("li")
       entry.classList.add("filterentry")
       var lab = labels[l]
-      if(invisiblelabels.has(lab)){
+      if(invisiblelabels.has(lab+"."+head.target.id)){
         entry.classList.add("inactive");
       }
       entry.innerHTML = labeldict[lab];
@@ -130,7 +146,7 @@ function createissuetable(id){
       entry.addEventListener("click",function(){
         entry.classList.toggle("inactive");
 
-        appendinvisible(entry.labelid);
+        appendinvisible(entry.labelid+"."+head.target.id);
       })
       list.appendChild(entry);
     }
@@ -138,7 +154,7 @@ function createissuetable(id){
 
   }
 
-  var filterheads = ["city","feature","relevance","other_labels","status"]
+  var filterheads = ["city","raised_by","feature","relevance","other_labels","status"]
 
   //   //Creating table heads
     function createheads(heads){
@@ -231,15 +247,25 @@ function createissuetable(id){
           Object.keys(heads).forEach(initrows)
 
           function initrows(item,index,arr){
-            curr_row.appendChild(document.createElement("td")).appendChild(document.createElement("div")).classList.add("empty_"+item);
+            var emptycell=document.createElement("div");
+            emptycell.classList.add("empty","entry",item);
+            emptycell.setAttribute("entryid","empty")
+            curr_row.appendChild(document.createElement("td")).appendChild(emptycell);
+            // var emptycell = curr_row.appendChild(document.createElement("td")).appendChild(document.createElement("div")).classList.add("empty",item)
+            // emptycell.setAttribute("entryid","empty");
           }
 
           function populatecell(index,content){
             if (content.length>0){
-              var cell = curr_row.childNodes[index]
+              var cell = curr_row.childNodes[index];
               cell.innerHTML="";
-              var cont=document.createElement("div")
-              cont.innerHTML=content
+              var cont=document.createElement("div");
+              cont.innerHTML=content.toString();
+              // console.log(content)
+              cont.classList.add(Object.keys(heads)[index],"entry");
+              cont.classList.add(content.replace(/([^a-z0-9]+)/gi, '_'))
+              cont.setAttribute("entryid",content.replace(/([^a-z0-9]+)/gi, '_'));
+              labeldict[content.replace(/([^a-z0-9]+)/gi, '_')]=content;
               cell.appendChild(cont);
 
             }
@@ -250,20 +276,24 @@ function createissuetable(id){
           }
 
           function removeempty(index){
-            var emp = curr_row.childNodes[index].getElementsByClassName("empty_"+Object.keys(heads)[index])[0]
+            var emp = curr_row.childNodes[index].getElementsByClassName("empty "+Object.keys(heads)[index])[0]
             if (emp != undefined){
               emp.parentNode.removeChild(emp)
             }
           }
 
-
-          populatecell(getindex("id"),"<a href="+rowdata.html_url+" target='_blank' >"+rowdata.number+"</a>")
+          // populatecell(getindex("id"),"#"+rowdata.number.toString())
           populatecell(getindex("title"),rowdata.title);
           populatecell(getindex("raised_by"),rowdata.user.login);
           populatecell(getindex("created"),(rowdata.created_at).replace("T"," ").replace("Z",""));
           populatecell(getindex("updated"),(rowdata.updated_at).replace("T"," ").replace("Z",""));
           populatecell(getindex("status"),rowdata.state);
-          populatecell(getindex("assignees"),getsubobject(rowdata.assignees,"login"))
+          populatecell(getindex("assignees"),getsubobject(rowdata.assignees,"login"));
+
+          var link = curr_row.childNodes[getindex("id")].appendChild(document.createElement("a"))
+          link.href=rowdata.html_url;
+          link.target="_blank"
+          link.innerHTML="#"+rowdata.number.toString();
 
           var stat = curr_row.childNodes[getindex("status")].childNodes[0]
           stat.classList.add("label")
@@ -278,9 +308,10 @@ function createissuetable(id){
             labeldict[item.node_id]=item.name
 
             let label = document.createElement("div")
-            label.classList.add("label",item.node_id);
+            label.classList.add("label","entry",item.node_id);
             label.innerHTML=item.name;
             label.style.borderColor="#"+item.color;
+            label.setAttribute("entryid",item.node_id)
 
             //create tooltip
             label.addEventListener("mouseover",function(){
@@ -300,11 +331,13 @@ function createissuetable(id){
             if (Object.keys(labelcats).includes(item.name)){
                removeempty(getindex(labelcats[item.name]))
               labelcollection[labelcats[item.name]].add(item.node_id)
+              label.classList.add(Object.keys(heads)[getindex(labelcats[item.name])])
               curr_row.childNodes[getindex(labelcats[item.name])].appendChild(label)
             }
             else{
               removeempty(getindex("other_labels"))
               curr_row.childNodes[getindex("other_labels")].appendChild(label)
+              label.classList.add("other_labels")
               labelcollection["other_labels"].add(item.node_id)
             }
           }

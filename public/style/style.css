@@ -51,6 +51,9 @@ tr {
   cursor: pointer;
 }
 
+.entry{
+}
+
 .filterentry:hover{
   cursor: pointer;
   color: #383838;
@@ -65,10 +68,7 @@ tr {
 }
 
 .empty{
-  border: 1pt green solid;
-  background: purple;
-  width: 10px;
-  height: 10px;
+  display: none;
 }
 
 .tablediv{
