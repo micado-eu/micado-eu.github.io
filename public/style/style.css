@@ -43,6 +43,34 @@ tr {
   width: 100%;
 }
 
+.closebar{
+  text-align: right;
+}
+
+.closebarx:hover{
+  cursor: pointer;
+}
+
+.filterentry:hover{
+  cursor: pointer;
+  color: #383838;
+}
+
+.filterable{
+  text-decoration: underline;
+}
+
+.filterable:hover{
+  cursor: pointer;
+}
+
+.empty{
+  border: 1pt green solid;
+  background: purple;
+  width: 10px;
+  height: 10px;
+}
+
 .tablediv{
 }
 
@@ -52,16 +80,34 @@ tr {
 .loadmorediv{
 }
 
+.tablerow{
+}
+
+.selected{
+  background-color: green;
+}
+
+.inactive{
+  color: grey;
+}
+
+.filterdiv {
+	position: absolute;
+	background: white;
+	box-shadow: 4px 4px 10px grey;
+	padding: 5pt;
+	border: black solid;
+	border-radius: ;
+}
+
 .tooltipdiv{
   position: fixed;
   background: white;
-  border: black solid 1pt;
+  /* border: black solid 1pt; */
   padding: 2pt;
   border-radius: 3px;
-  /* top: 50px;
-  left: 300px; */
-  /* width: 200px;
-  height: 30px; */
+  box-shadow: 4px 4px 10px grey;
+
 }
 
 .tooltip_content{
@@ -87,7 +133,17 @@ tr {
   text-align: center;
   padding: 2pt;
   cursor: pointer;
+  max-width: max-content;
 }
+
+.label.open{
+  border-color: green;
+}
+
+.label.closed{
+  border-color: red;
+}
+
 
 .invisible{
   display: none;
