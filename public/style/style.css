@@ -2,16 +2,24 @@ body{
   font-family: Nunito;
 }
 
-h1{
+a{
+  text-decoration: none;
+  font-weight: bold;
+  color: #9e1f63;
 }
 
+a:hover{
+  text-decoration: underline;
+  transition: 0.5s;
+}
+
+
 table{
-  border: 1pt black;
+  width: 100%;
+  margin-top: 5px;
 }
 
 th{
-  position: sticky;
-  top: 0;
   background: white;
   font-weight: bold;
 }
@@ -34,8 +42,14 @@ tr:hover{
   background-color: #f7f7f7;
 }
 
-tr {
+/* tr {
 	outline: 1pt black solid;
+} */
+
+tr.head{
+  outline: 2pt black solid;
+  position: sticky;
+  top: 0;
 }
 
 .content{
@@ -46,9 +60,20 @@ tr {
   text-align: right;
   padding: 5px;
   background: #f0f0f0;
+  display: flex;
+  justify-content: space-between;
 }
 
-.closebarx:hover{
+.closebarx{
+  font-size: smaller;
+}
+
+.closetitle{
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.closebar:hover{
   cursor: pointer;
 }
 
@@ -76,22 +101,6 @@ tr {
   display: none;
 }
 
-.tablediv{
-}
-
-.selectdiv{
-}
-
-.loadmorediv{
-}
-
-.tablerow{
-}
-
-.selected{
-  background-color: green;
-}
-
 
 .inactive{
   color: grey;
@@ -116,9 +125,6 @@ tr {
 
 }
 
-.tooltip_content{
-
-}
 
 
 .loadmore{
@@ -133,15 +139,41 @@ tr {
   background: #f0f0f0;
 }
 
-.label{
-  border-radius: 50px;
-  border: solid 2pt;
-  text-align: center;
-  padding: 2pt;
-  cursor: pointer;
-  max-width: max-content;
+#selectform{
+	border: 2pt black solid;
+	padding: 2pt;
+	margin-right: 3pt;
+	background: white;
+	cursor: pointer;
+
 }
 
+
+#selectbutton {
+	background: white;
+	border: black 2pt solid;
+	padding: 2pt;
+	cursor: pointer;
+}
+
+#selectbutton:hover {
+	background: #e8e8e8;
+	transition-duration: 0.2s;
+}
+
+.label {
+	border-radius: 8px;
+	border: solid 2pt;
+	text-align: center;
+	padding: 3pt;
+	cursor: pointer;
+	max-width: max-content;
+	display: inline-flex;
+	margin: 2pt;
+	background: white;
+	box-shadow: 1px 1px 5px #a4a4a4;
+
+}
 .label.open{
   border-color: green;
 }

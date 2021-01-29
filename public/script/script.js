@@ -43,13 +43,13 @@ function createissuetable(id){
     "title":"Title",
     "raised_by":"Raised by",
     "assignees":"Assignee(s)",
-    "created":"Created at",
-    "updated":"Last update",
     "city":"Cities",
     "feature":"Feature",
     "relevance":"Relevance",
     "other_labels":"Other labels",
-    "status":"Status"
+    "status":"Status",
+    "created":"Created at",
+    "updated":"Last update"
     }
 
 
@@ -113,15 +113,22 @@ function createissuetable(id){
     var filterwindow = document.createElement("div");
     var closebar = document.createElement("div");
     closebar.classList.add("closebar")
-    var closebarx = document.createElement("div");
+    var closebarx = document.createElement("div")
     closebarx.innerHTML="✖"
     closebarx.classList.add("closebarx")
-    closebar.appendChild(closebarx)
+    var closetitle=document.createElement("div")
+    closetitle.innerHTML=heads[head.target.id]
+    closetitle.classList.add("closetitle")
+
+
+    closebar.appendChild(closetitle);
+    closebar.appendChild(closebarx);
+    // closebarx.childNodes.head.target.id+"✖"
+    // closebar.appendChild(closebarx)
     filterdiv.appendChild(closebar)
     closebar.addEventListener("click",function(){filterdiv.innerHTML="";filterdiv.classList.add("invisible")})
     filterdiv.appendChild(filterwindow);
-    filterdiv.style.left=event.clientX+"px";
-    filterdiv.style.top=event.clientY+"px";
+
 
     //Filterdiv set up
     //Generating content
@@ -161,31 +168,26 @@ function createissuetable(id){
 
       })
 
-      // let entry = document.createElement("li")
-      // entry.classList.add("filterentry")
-      // var lab = labels[l]
-      // if(invisiblelabels.has(lab+"."+head.target.id)){
-      //   entry.classList.add("inactive");
-      // }
-      // entry.innerHTML = labeldict[lab];
-      // entry.labelid = lab
-      // entry.addEventListener("click",function(){
-      //   entry.classList.toggle("inactive");
-      //
-      //   appendinvisible(entry.labelid+"."+head.target.id);
-      // });
-      //
-      // list.appendChild(entry);
     }
     filterwindow.appendChild(list)
+
+    let position = head.originalTarget.getBoundingClientRect();
+    let poselem = filterdiv.getBoundingClientRect();
+
+
+
+    filterdiv.style.left=position.left+window.scrollX+(position.width/2)-(poselem.width/2)+"px";
+    filterdiv.style.top=position.top+window.scrollY+"px";
+
 
   }
 
   var filterheads = ["city","raised_by","assignees","feature","relevance","other_labels","status"]
 
-  //   //Creating table heads
+  //   Creating table heads
     function createheads(heads){
       var tablehead = issuetable.appendChild(document.createElement("tr"));
+      tablehead.classList.add("head")
       for (head in heads){
         let entry = document.createElement("th")
         entry.id=head;
