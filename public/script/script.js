@@ -36,6 +36,8 @@ function createissuetable(id){
   //contains the features that contain the class appendinvisible
   var invisiblelabels=new Set()
 
+
+  //headers of table
   var heads={
     "id":"ID",
     "title":"Title",
@@ -147,14 +149,14 @@ function createissuetable(id){
         entry.classList.toggle("inactive");
 
         appendinvisible(entry.labelid+"."+head.target.id);
-      })
+      });
       list.appendChild(entry);
     }
     filterwindow.appendChild(list)
 
   }
 
-  var filterheads = ["city","raised_by","feature","relevance","other_labels","status"]
+  var filterheads = ["city","raised_by","assignees","feature","relevance","other_labels","status"]
 
   //   //Creating table heads
     function createheads(heads){
@@ -188,7 +190,7 @@ function createissuetable(id){
 
 
   function appendtable(q,page){
-    //Define how many results should be loaded per query
+    //Define how many results should be loaded per query (max 100, 30 by standard)
     var perpage=100;
     //Link to the repository
     var repolink = "https://api.github.com/repos/micado-eu/REPONAME/issues?state=all&per_page=PERPAGE&page=".replace("REPONAME",q).replace("PERPAGE",perpage)+page
@@ -288,7 +290,14 @@ function createissuetable(id){
           populatecell(getindex("created"),(rowdata.created_at).replace("T"," ").replace("Z",""));
           populatecell(getindex("updated"),(rowdata.updated_at).replace("T"," ").replace("Z",""));
           populatecell(getindex("status"),rowdata.state);
-          populatecell(getindex("assignees"),getsubobject(rowdata.assignees,"login"));
+
+          if (rowdata.assignees.length>0){
+            removeempty(getindex("assignees"))
+
+            for (i = 0; i < rowdata.assignees.length; i++)
+            curr_row.childNodes[getindex("assignees")].appendChild(getsubobject(rowdata.assignees,"login","assignees")[i])
+          }
+          // populatecell(getindex("assignees"),getsubobject(rowdata.assignees,"login"));
 
           var link = curr_row.childNodes[getindex("id")].appendChild(document.createElement("a"))
           link.href=rowdata.html_url;
@@ -348,12 +357,23 @@ function createissuetable(id){
       }
       //end of createrows
 
-      function getsubobject(input,key){
-        let output = []
-        for (i in input){
-          output.push(input[i][key])
-        }
-        return output.join(', ')
+      function getsubobject(input,k,category){
+          let output = document.createElement("div")
+          for (i in input){
+            let cont = input[i][k]
+            let cell = document.createElement("div")
+            cell.innerHTML=cont.toString();
+            // console.log(content)
+            cell.classList.add(category,"entry");
+            cell.classList.add(cont.replace(/([^a-z0-9]+)/gi, '_'))
+            cell.setAttribute("entryid",cont.replace(/([^a-z0-9]+)/gi, '_'));
+            cell[cont.replace(/([^a-z0-9]+)/gi, '_')]=input;
+            labeldict[cont.replace(/([^a-z0-9]+)/gi, '_')]=cont;
+            output.appendChild(cell)
+          }
+          return output.children
+
+
       }
 
       // createheads(heads)
