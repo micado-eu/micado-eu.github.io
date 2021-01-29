@@ -73,8 +73,6 @@ function createissuetable(id){
       invisiblelabels.add(inp)
     }
 
-    console.log(invisiblelabels)
-
     toggleinvisble()
   }
 
@@ -86,20 +84,14 @@ function createissuetable(id){
         tablerows[t].classList.remove("invisible");
     }
 
+    invisiblelabels.forEach(makeinvisible);
 
-    if (invisiblelabels.size>0){
-      let entries = document.querySelectorAll("."+[...invisiblelabels].join(', .'))
-
-
-      for(var e=0; e < tablerows.length; e++)
-      {
-          if (entries[e]!=undefined){
-            entries[e].parentNode.parentNode.classList.add("invisible");
-
-          }
+    function makeinvisible(value){
+      let entries = document.querySelectorAll("."+value);
+      for (var e=0; e<entries.length; e++){
+        entries[e].parentNode.parentNode.classList.add("invisible")
       }
     }
-
 
   }
 
@@ -135,22 +127,55 @@ function createissuetable(id){
     //Generating content
     labeldict["empty"]="empty"
 
-    var list = document.createElement("ul");
+    var list = document.createElement("div");
+    list.classList.add("checkboxlist");
     for (l in labels){
-      let entry = document.createElement("li")
-      entry.classList.add("filterentry")
-      var lab = labels[l]
-      if(invisiblelabels.has(lab+"."+head.target.id)){
-        entry.classList.add("inactive");
-      }
-      entry.innerHTML = labeldict[lab];
-      entry.labelid = lab
-      entry.addEventListener("click",function(){
-        entry.classList.toggle("inactive");
+      let entry=document.createElement("div");
+      entry.classList.add("checkentry")
+      let lab = labels[l]
+      let checkbox = document.createElement("input");
 
-        appendinvisible(entry.labelid+"."+head.target.id);
-      });
+      checkbox.type="checkbox";
+      checkbox.name=lab;
+      checkbox.value=lab
+      checkbox.id=lab;
+      checkbox.checked=true;
+
+      if(invisiblelabels.has(lab+"."+head.target.id)){
+        checkbox.classList.add("inactive");
+        checkbox.checked=false;
+      }
+
+
+      let content = document.createElement("label");
+      content.htmlFor=lab;
+      content.appendChild(document.createTextNode(labeldict[lab]));
+      entry.appendChild(checkbox);
+      entry.appendChild(content);
+
       list.appendChild(entry);
+
+      checkbox.addEventListener("click",function(){
+        checkbox.classList.toggle("inactive");
+        appendinvisible(checkbox.id+"."+head.target.id);
+
+      })
+
+      // let entry = document.createElement("li")
+      // entry.classList.add("filterentry")
+      // var lab = labels[l]
+      // if(invisiblelabels.has(lab+"."+head.target.id)){
+      //   entry.classList.add("inactive");
+      // }
+      // entry.innerHTML = labeldict[lab];
+      // entry.labelid = lab
+      // entry.addEventListener("click",function(){
+      //   entry.classList.toggle("inactive");
+      //
+      //   appendinvisible(entry.labelid+"."+head.target.id);
+      // });
+      //
+      // list.appendChild(entry);
     }
     filterwindow.appendChild(list)
 
@@ -263,7 +288,6 @@ function createissuetable(id){
               cell.innerHTML="";
               var cont=document.createElement("div");
               cont.innerHTML=content.toString();
-              // console.log(content)
               cont.classList.add(Object.keys(heads)[index],"entry");
               cont.classList.add(content.replace(/([^a-z0-9]+)/gi, '_'))
               cont.setAttribute("entryid",content.replace(/([^a-z0-9]+)/gi, '_'));
@@ -363,7 +387,6 @@ function createissuetable(id){
             let cont = input[i][k]
             let cell = document.createElement("div")
             cell.innerHTML=cont.toString();
-            // console.log(content)
             cell.classList.add(category,"entry");
             cell.classList.add(cont.replace(/([^a-z0-9]+)/gi, '_'))
             cell.setAttribute("entryid",cont.replace(/([^a-z0-9]+)/gi, '_'));

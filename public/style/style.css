@@ -39,16 +39,21 @@ tr {
 }
 
 .content{
-  /* border: 1pt black dashed; */
   width: 100%;
 }
 
 .closebar{
   text-align: right;
+  padding: 5px;
+  background: #f0f0f0;
 }
 
 .closebarx:hover{
   cursor: pointer;
+}
+
+.checkboxlist{
+  padding: 5px;
 }
 
 .entry{
@@ -87,6 +92,7 @@ tr {
   background-color: green;
 }
 
+
 .inactive{
   color: grey;
 }
@@ -97,7 +103,7 @@ tr {
 	box-shadow: 4px 4px 10px grey;
 	padding: 5pt;
 	border: black solid;
-	border-radius: ;
+  padding: 0;
 }
 
 .tooltipdiv{
