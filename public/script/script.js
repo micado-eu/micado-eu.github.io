@@ -196,7 +196,8 @@ function createissuetable(id) {
         }
 
         // let labels = Array.from(labelcollection[head.target.id]);
-        let labels = Array.from(labelset);
+        let labels = Array.from(labelset).sort(function(a,b){return a.toLowerCase().localeCompare(b.toLowerCase());});
+        labels.push(labels.splice(labels.indexOf("empty"), 1)[0]);
 
         //Setting up filterdiv
         filterdiv.classList.remove("invisible");
@@ -248,6 +249,7 @@ function createissuetable(id) {
 
 
             let content = document.createElement("label");
+            // content.htmlFor = lab+" ("+document.querySelectorAll(".cell."+lab+":not(invisible)").length+")";
             content.htmlFor = lab;
             content.appendChild(document.createTextNode(labeldict[lab]));
             entry.appendChild(checkbox);
