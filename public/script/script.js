@@ -241,8 +241,9 @@ function createissuetable(id) {
             checkbox.checked = true;
 
             if (invislabels[head.target.id].has(lab)) {
-                checkbox.classList.add("inactive");
                 checkbox.checked = false;
+                entry.classList.add("inactive");
+
             }
 
 
@@ -256,6 +257,8 @@ function createissuetable(id) {
 
             checkbox.addEventListener("click", function() {
                 checkbox.classList.toggle("inactive");
+                entry.classList.toggle("inactive");
+
                 appendinvisible2(head.target.id,checkbox.id);
 
             });

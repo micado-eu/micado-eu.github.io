@@ -106,6 +106,22 @@ tr.head{
   color: grey;
 }
 
+
+.checkentry:hover{
+  color: grey;
+  cursor: pointer;
+}
+
+label:hover{
+  color: grey;
+  cursor: pointer;
+}
+
+/* label:hover{
+  background-color: blue;
+  cursor: pointer;
+} */
+
 .filterdiv {
 	position: absolute;
 	background: white;
