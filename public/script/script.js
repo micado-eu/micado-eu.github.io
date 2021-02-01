@@ -46,6 +46,7 @@ function createissuetable(id) {
     });
 
 
+
     //Table (main content)
     var tablediv = contentdiv.appendChild(document.createElement("div"));
     tablediv.id = "tablediv";
@@ -65,8 +66,11 @@ function createissuetable(id) {
 
     var page = 1; //Github queries max 100 entries, this variable increases after the query automatically
     var labeldict = new Object(); //links the label codes to the label names
+    labeldict["empty"]="empty";
     var labelcollection = new Object(); //categorises labels
     var invisiblelabels = new Set(); //contains the features that contain the class appendinvisible
+
+    var invislabels = new Object();
 
 
     //headers of table
@@ -113,48 +117,82 @@ function createissuetable(id) {
         "LESC": "relevance",
     };
 
+    //Appends label attributes to the parent cell
+    function appendData(elem,id,inp){
+      if (elem.getAttribute(id) == null){               //If entry does not exist, it will be generated
+        elem.setAttribute(id,inp);
+      } else if (elem.getAttribute(id)== "empty") {    //Resets attribute and replaces empty
+        elem.setAttribute(id,inp)
+      }else {
+        let attr = elem.getAttribute(id).split(","); //appends entry to the array
+        attr.push(inp);
+        elem.setAttribute(id,attr.join())
+      }
+    }
 
 
 
-    //Adds objects that should be set to invisible when deselected
-    function appendinvisible(inp) {
+    function appendinvisible2(key,value){
 
-        if (invisiblelabels.has(inp)) {
-            invisiblelabels.delete(inp);
-        } else {
-            invisiblelabels.add(inp);
-        }
+      if (invislabels[key].has(value)){
+        invislabels[key].delete(value);
+      }else{
+        invislabels[key].add(value);
+      }
 
-        toggleinvisble();
-    };
+      resettable();
 
-    //Applies selection of visible/invisible objects
-    function toggleinvisble() {
-        let tablerows = document.getElementsByClassName("tablerow");
+      Object.keys(invislabels).forEach(generatequery)
 
-        for (var t = 0; t < tablerows.length; t++) {
-            tablerows[t].classList.remove("invisible");
-        }
+      function generatequery(item,index,array){
+        var query
+        if (invislabels[item].size > 0){
+          query="."+item+"."+[...invislabels[item]].join(', .'+item+".");
+          let entries = document.querySelectorAll(query);
 
-        invisiblelabels.forEach(makeinvisible);
-
-        function makeinvisible(value) {
-            let entries = document.querySelectorAll("." + value);
-            for (var e = 0; e < entries.length; e++) {
-                entries[e].parentNode.parentNode.classList.add("invisible");
+          for (var e = 0; e < entries.length; e++) {
+            let counter = 0;
+            let dataentries = entries[e].parentNode.getAttribute("data-entries").split(",");
+            for (i in dataentries){
+              if (invislabels[item].has(dataentries[i])){
+                counter=counter+1;
+              }
             }
-        };
+            if (counter == dataentries.length){
+              entries[e].parentNode.parentNode.classList.add("invisible")
+            }
 
-    };
+          }
+        };
+      };
+
+
+    }
+
+    function resettable(){
+      let tablerows = document.getElementsByClassName("tablerow");
+      for (var t = 0; t < tablerows.length; t++) {
+          tablerows[t].classList.remove("invisible");
+          tablerows[t].classList.remove("selected"); ///delete
+
+      }
+    }
+
+
 
     //Generates the filter in the table heads
     function generatefilter(head) {
 
-        var cells = document.getElementsByClassName("entry " + head.target.id);
+        var cells = document.getElementsByClassName("cell " + head.target.id);
+        // var cells = document.getElementsByClassName("cell cities")
         let labelset = new Set();
 
         for (var c = 0; c < cells.length; c++) {
-            labelset.add(cells[c].getAttribute("entryid"));
+          // cells[c].classList.add("selected");
+          let entrylist = cells[c].getAttribute("data-entries").split(",");
+          for (var e=0; e < entrylist.length; e++){
+            labelset.add(entrylist[e])
+          }
         }
 
         // let labels = Array.from(labelcollection[head.target.id]);
@@ -186,10 +224,10 @@ function createissuetable(id) {
 
         //Filterdiv set up
         //Generating content
-        labeldict["empty"] = "empty";
 
         var list = document.createElement("div");
         list.classList.add("checkboxlist");
+
         for (l in labels) {
             let entry = document.createElement("div");
             entry.classList.add("checkentry");
@@ -202,7 +240,7 @@ function createissuetable(id) {
             checkbox.id = lab;
             checkbox.checked = true;
 
-            if (invisiblelabels.has(lab + "." + head.target.id)) {
+            if (invislabels[head.target.id].has(lab)) {
                 checkbox.classList.add("inactive");
                 checkbox.checked = false;
             }
@@ -218,7 +256,7 @@ function createissuetable(id) {
 
             checkbox.addEventListener("click", function() {
                 checkbox.classList.toggle("inactive");
-                appendinvisible(checkbox.id + "." + head.target.id);
+                appendinvisible2(head.target.id,checkbox.id);
 
             });
 
@@ -242,6 +280,7 @@ function createissuetable(id) {
         var tablehead = issuetable.appendChild(document.createElement("tr"));
         tablehead.classList.add("head");
         for (head in heads) {
+            invislabels[head]=new Set();
             let entry = document.createElement("th");
             entry.id = head;
             entry.innerHTML = heads[head];
@@ -256,6 +295,7 @@ function createissuetable(id) {
             labelcollection["status"] = new Set(["open", "closed"]);
         };
     };
+
 
 
 
@@ -292,10 +332,12 @@ function createissuetable(id) {
 
                     //Setss up empty cells
                     function initrows(item, index, arr) {
-                        var emptycell = document.createElement("div");
-                        emptycell.classList.add("empty", "entry", item);
-                        emptycell.setAttribute("entryid", "empty")
-                        curr_row.appendChild(document.createElement("td")).appendChild(emptycell);
+                        var cell = document.createElement("td");
+                        appendData(cell,"data-entries","empty");
+                        cell.classList.add("cell",item)
+                        var entry = document.createElement("div");
+                        entry.classList.add("empty", "entry", item);
+                        curr_row.appendChild(cell).appendChild(entry);
                     };
 
                     //Populates the cell with content
@@ -307,7 +349,7 @@ function createissuetable(id) {
                             cont.innerHTML = content.toString();
                             cont.classList.add(Object.keys(heads)[index], "entry");
                             cont.classList.add(content.replace(/([^a-z0-9]+)/gi, '_'));
-                            cont.setAttribute("entryid", content.replace(/([^a-z0-9]+)/gi, '_'));
+                            appendData(cell,"data-entries",content.replace(/([^a-z0-9]+)/gi, '_'))
                             labeldict[content.replace(/([^a-z0-9]+)/gi, '_')] = content;
                             cell.appendChild(cont);
 
@@ -331,9 +373,9 @@ function createissuetable(id) {
                         let assignee = document.createElement("div");
                         assignee.classList.add("entry", "assignees", item.login.replace(/([^a-z0-9]+)/gi, '_'));
                         assignee.innerHTML = item.login;
-                        assignee.setAttribute("entryid", item.login.replace(/([^a-z0-9]+)/gi, '_'));
 
                         curr_row.childNodes[getindex("assignees")].appendChild(assignee);
+                      appendData(curr_row.childNodes[getindex("assignees")],"data-entries",item.login.replace(/([^a-z0-9]+)/gi, '_'))
                     };
                     //Iterates through the labels and assigns them to the right columns
                     function assignlabels(item, index, arr) {
@@ -344,7 +386,7 @@ function createissuetable(id) {
                         label.classList.add("label", "entry", item.node_id);
                         label.innerHTML = item.name;
                         label.style.borderColor = "#" + item.color;
-                        label.setAttribute("entryid", item.node_id);
+
 
                         //create tooltip
                         label.addEventListener("mouseover", function() {
@@ -367,12 +409,17 @@ function createissuetable(id) {
                             labelcollection[labelcats[item.name]].add(item.node_id);
                             label.classList.add(Object.keys(heads)[getindex(labelcats[item.name])]);
                             curr_row.childNodes[getindex(labelcats[item.name])].appendChild(label);
+                            appendData(curr_row.childNodes[getindex(labelcats[item.name])],"data-entries",item.node_id);
+
                         } else {
                             removeempty(getindex("other_labels"));
                             curr_row.childNodes[getindex("other_labels")].appendChild(label);
                             label.classList.add("other_labels");
                             labelcollection["other_labels"].add(item.node_id);
+                            appendData(curr_row.childNodes[getindex("other_labels")],"data-entries",item.node_id);
                         };
+
+
                     };
 
                     let curr_row = issuetable.appendChild(document.createElement("tr"));

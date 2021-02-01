@@ -161,6 +161,11 @@ tr.head{
 	transition-duration: 0.2s;
 }
 
+.selected {
+  background: green;
+}
+
+
 .label {
 	border-radius: 8px;
 	border: solid 2pt;
