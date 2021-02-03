@@ -142,30 +142,6 @@ function createissuetable(id) {
 
       resettable();
 
-      Object.keys(invislabels).forEach(generatequery)
-
-      function generatequery(item,index,array){
-        var query
-        if (invislabels[item].size > 0){
-          query="."+item+"."+[...invislabels[item]].join(', .'+item+".");
-          let entries = document.querySelectorAll(query);
-
-          for (var e = 0; e < entries.length; e++) {
-            let counter = 0;
-            let dataentries = entries[e].parentNode.getAttribute("data-entries").split(",");
-            for (i in dataentries){
-              if (invislabels[item].has(dataentries[i])){
-                counter=counter+1;
-              }
-            }
-            if (counter == dataentries.length){
-              entries[e].parentNode.parentNode.classList.add("invisible")
-            }
-
-          }
-        };
-      };
-
 
     }
 
@@ -177,6 +153,29 @@ function createissuetable(id) {
 
       }
     }
+
+    function generatequery(item,index,array){
+      var query
+      if (invislabels[item].size > 0){
+        query="."+item+"."+[...invislabels[item]].join(', .'+item+".");
+        let entries = document.querySelectorAll(query);
+
+        for (var e = 0; e < entries.length; e++) {
+          let counter = 0;
+          let dataentries = entries[e].parentNode.getAttribute("data-entries").split(",");
+          for (i in dataentries){
+            if (invislabels[item].has(dataentries[i])){
+              counter=counter+1;
+            }
+          }
+          if (counter == dataentries.length){
+            entries[e].parentNode.parentNode.classList.add("invisible")
+          }
+
+        }
+      };
+    };
+
 
 
 
@@ -218,9 +217,42 @@ function createissuetable(id) {
         filterdiv.appendChild(closebar);
         closebar.addEventListener("click", function() {
             filterdiv.innerHTML = "";
-            filterdiv.classList.add("invisible")
+            filterdiv.classList.add("invisible");
         })
         filterdiv.appendChild(filterwindow);
+
+        var deselect = document.createElement("div");
+        var des_button = document.createElement("button");
+        des_button.innerHTML = "Deselect all";
+        des_button.addEventListener("click",function(){
+          console.log(labels)
+          invislabels[head.target.id]=new Set(labels);
+          resettable();
+          Object.keys(invislabels).forEach(generatequery);
+          let checklists = filterwindow.getElementsByClassName('checkentry');
+          console.log(checklists);
+          for (var c = 0; c < checklists.length; c++) {
+            checklists[c].getElementsByTagName("input")[0].checked = false;
+            checklists[c].classList.add("inactive");
+          }
+        });
+        var sel_button = document.createElement("button");
+        sel_button.innerHTML = "Select all";
+        sel_button.addEventListener("click",function(){
+          console.log(labels)
+          invislabels[head.target.id]=new Set();
+          resettable();
+          Object.keys(invislabels).forEach(generatequery);
+          let checklists = filterwindow.getElementsByClassName('checkentry');
+          console.log(checklists);
+          for (var c = 0; c < checklists.length; c++) {
+            checklists[c].getElementsByTagName("input")[0].checked = true;
+            checklists[c].classList.remove("inactive");
+          }
+        });
+        deselect.appendChild(sel_button);
+        deselect.appendChild(des_button);
+        filterwindow.appendChild(deselect);
 
 
         //Filterdiv set up
@@ -260,9 +292,8 @@ function createissuetable(id) {
             checkbox.addEventListener("click", function() {
                 checkbox.classList.toggle("inactive");
                 entry.classList.toggle("inactive");
-
                 appendinvisible2(head.target.id,checkbox.id);
-
+                Object.keys(invislabels).forEach(generatequery)
             });
 
         }
