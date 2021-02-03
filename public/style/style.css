@@ -68,6 +68,10 @@ tr.head{
   font-size: smaller;
 }
 
+.closebarx:before{
+  content: "\2716"
+}
+
 .closetitle{
   font-weight: bold;
   margin-right: 5px;

@@ -205,7 +205,6 @@ function createissuetable(id) {
         var closebar = document.createElement("div");
         closebar.classList.add("closebar");
         var closebarx = document.createElement("div")
-        closebarx.innerHTML = "✖";
         closebarx.classList.add("closebarx");
         var closetitle = document.createElement("div")
         closetitle.innerHTML = heads[head.target.id];
@@ -225,12 +224,10 @@ function createissuetable(id) {
         var des_button = document.createElement("button");
         des_button.innerHTML = "Deselect all";
         des_button.addEventListener("click",function(){
-          console.log(labels)
           invislabels[head.target.id]=new Set(labels);
           resettable();
           Object.keys(invislabels).forEach(generatequery);
           let checklists = filterwindow.getElementsByClassName('checkentry');
-          console.log(checklists);
           for (var c = 0; c < checklists.length; c++) {
             checklists[c].getElementsByTagName("input")[0].checked = false;
             checklists[c].classList.add("inactive");
@@ -239,12 +236,10 @@ function createissuetable(id) {
         var sel_button = document.createElement("button");
         sel_button.innerHTML = "Select all";
         sel_button.addEventListener("click",function(){
-          console.log(labels)
           invislabels[head.target.id]=new Set();
           resettable();
           Object.keys(invislabels).forEach(generatequery);
           let checklists = filterwindow.getElementsByClassName('checkentry');
-          console.log(checklists);
           for (var c = 0; c < checklists.length; c++) {
             checklists[c].getElementsByTagName("input")[0].checked = true;
             checklists[c].classList.remove("inactive");
@@ -299,7 +294,7 @@ function createissuetable(id) {
         }
         filterwindow.appendChild(list);
 
-        let position = head.originalTarget.getBoundingClientRect();
+        let position = head.srcElement.getBoundingClientRect();
         let poselem = filterdiv.getBoundingClientRect();
 
 
