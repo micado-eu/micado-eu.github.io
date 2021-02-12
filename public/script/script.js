@@ -114,7 +114,13 @@ function createissuetable(id) {
         "validations": "feature",
         "WP4": "relevance",
         "WP5": "relevance",
-        "LESC": "relevance",
+        "LESC Antwerp": "relevance",
+        "LESC Bologna": "relevance",
+        "LESC Hamburg": "relevance",
+        "LESC Madrid": "relevance",
+        "SC": "relevance",
+        "Layout Taskforce": "relevance",
+        "GA": "relevance"
     };
 
     //Appends label attributes to the parent cell
