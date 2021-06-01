@@ -1,0 +1,1441 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="micado" schema="micadoapp" type="PostgreSQL - 11.9">
+   <tables>
+      <table name="active_features" numRows="0" remarks="" schema="micadoapp" type="VIEW">
+         <column autoUpdated="false" digits="0" id="0" name="features" nullable="true" remarks="" size="2147483647" type="json"/>
+      </table>
+      <table name="charts" numRows="19" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.charts_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial"/>
+         <column autoUpdated="false" digits="0" id="1" name="title" nullable="false" remarks="" size="255" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="content" nullable="false" remarks="" size="2147483647" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="" size="2147483647" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="category" nullable="true" remarks="" size="255" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="format" nullable="true" remarks="" size="255" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="6" name="type" nullable="true" remarks="" size="255" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="7" name="xistime" nullable="true" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="8" name="x" nullable="true" remarks="" size="255" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="9" name="y" nullable="true" remarks="" size="255" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="10" name="board" nullable="true" remarks="" size="255" type="bpchar"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="charts_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="comment_translation_prod" numRows="0" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="comment_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="comment" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="translationdate" nullable="true" remarks="" size="13" type="date"/>
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.comment_translation_prod_id_seq'::regclass)" digits="0" id="3" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <parent column="id" foreignKey="comment_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="comments"/>
+         </column>
+         <primaryKey column="lang" sequenceNumberInPK="1"/>
+         <primaryKey column="id" sequenceNumberInPK="2"/>
+         <index name="comment_translation_prod_pkey" unique="true">
+            <column ascending="true" name="lang"/>
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="comments" numRows="5" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.comments_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <child column="id" foreignKey="comment_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="comment_translation_prod"/>
+            <child column="id" foreignKey="comment_translation_id_fkey" implied="false" onDeleteCascade="false" table="comments_translation"/>
+            <child column="idcomment" foreignKey="id_comment_fkey" implied="false" onDeleteCascade="true" table="process_comments"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="tenant_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="um_id" foreignKey="comment_tenant_id" implied="false" onDeleteCascade="true" table="um_tenant"/>
+         </column>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="2" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="3" name="published_date" nullable="true" remarks="" size="13" type="date"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="comments_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="comments_translation" numRows="25" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="comment_translation_id_fkey" implied="false" onDeleteCascade="false" table="comments"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="comment_translation_lang_fkey" implied="false" onDeleteCascade="false" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="comment" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="3" name="translationdate" nullable="true" remarks="" size="13" type="date"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="4" name="translationState" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="comments_translation_pkey" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="completed_intervention_document" numRows="0" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id_document" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="document_fk" implied="false" onDeleteCascade="true" table="document"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="id_intervention" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="intervention_fk" implied="false" onDeleteCascade="true" table="individual_intervention_plan_interventions"/>
+         </column>
+         <primaryKey column="id_document" sequenceNumberInPK="1"/>
+         <primaryKey column="id_intervention" sequenceNumberInPK="2"/>
+         <index name="intervention_doc_pk" unique="true">
+            <column ascending="true" name="id_document"/>
+            <column ascending="true" name="id_intervention"/>
+         </index>
+      </table>
+      <table name="document" numRows="3" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.document_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <child column="id_document" foreignKey="document_fk" implied="false" onDeleteCascade="true" table="completed_intervention_document"/>
+            <child column="doc_id" foreignKey="document_pictures_fk" implied="false" onDeleteCascade="true" table="document_pictures"/>
+         </column>
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.document_document_type_seq'::regclass)" digits="0" id="1" name="document_type" nullable="false" remarks="" size="5" type="smallserial">
+            <parent column="id" foreignKey="document_document_type_fkey" implied="false" onDeleteCascade="false" table="document_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="user_id" nullable="true" remarks="id of the user owner of the document" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="3" name="user_tenant" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="ask_validate_by_tenant" nullable="true" remarks="if the document is of a type that is validable here is where the owner can ask a potential validator to validate it" size="5" type="int2">
+            <parent column="um_id" foreignKey="document_ask_validate_by_tenant_fkey" implied="false" onDeleteCascade="false" table="um_tenant"/>
+         </column>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="validated" nullable="false" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="6" id="6" name="validation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="7" name="validated_by_tenant" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="8" name="validated_by_user" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="9" name="uploaded_by_me" nullable="false" remarks="this is used to uinderstand if is uploaded by the owner so that he can edit" size="1" type="bool"/>
+         <column autoUpdated="false" digits="6" id="10" name="expiration_date" nullable="true" remarks="this will be inserted by hand" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="document_pk" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="document_pictures" numRows="3" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.document_pictures_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial"/>
+         <column autoUpdated="false" digits="0" id="1" name="picture" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="doc_id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="document_pictures_fk" implied="false" onDeleteCascade="true" table="document"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="order" nullable="true" remarks="" size="5" type="int2"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="document_pictures_pk" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="document_type" numRows="15" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.document_type_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <child column="document_type" foreignKey="document_document_type_fkey" implied="false" onDeleteCascade="false" table="document"/>
+            <child column="document_type_id" foreignKey="document_type_picture_fk" implied="false" onDeleteCascade="false" table="document_type_picture"/>
+            <child column="id" foreignKey="document_type_translation_id_fkey" implied="false" onDeleteCascade="true" table="document_type_translation"/>
+            <child column="id" foreignKey="document_type_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="document_type_translation_prod"/>
+            <child column="document_type_id" foreignKey="document_type_validator_document_type_id_fkey" implied="false" onDeleteCascade="false" table="document_type_validator"/>
+            <child column="id_document" foreignKey="to_docs_fk" implied="false" onDeleteCascade="true" table="process_produced_documents"/>
+            <child column="id_document" foreignKey="step_document_id_document_fkey" implied="false" onDeleteCascade="true" table="step_document"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="icon" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="issuer" nullable="true" remarks="free text since not all issuers will have a tenant in MICADO" size="20" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="model" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="4" name="validable" nullable="false" remarks="if trhis document can be validated" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="5" name="validity_duration" nullable="true" remarks="the duration of the document in days" size="5" type="int2"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="6" name="model_is_present" nullable="true" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="7" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="document_type_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="document_type_picture" numRows="8" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.document_type_picture_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <child column="picture_id" foreignKey="picture_hotspot_fk" implied="false" onDeleteCascade="false" table="picture_hotspot"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="image" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="document_type_id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="document_type_picture_fk" implied="false" onDeleteCascade="false" table="document_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="order" nullable="true" remarks="" size="10" type="int4"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="document_type_picture_pk" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="document_type_translation" numRows="75" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="document_type_translation_id_fkey" implied="false" onDeleteCascade="true" table="document_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="document_type_translation_lang_fkey" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="document" nullable="true" remarks="" size="250" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="4" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="5" name="translationState" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="6" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="document_type_translation_pkey" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="document_type_translation_prod" numRows="24" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="document_type_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="document_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="document_type_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="document" nullable="true" remarks="" size="250" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="4" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="document_type_translation_prod_pk" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="document_type_validator" numRows="3" remarks="this table map all the organizations that are eligible to validate that tenant" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="document_type_id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="document_type_validator_document_type_id_fkey" implied="false" onDeleteCascade="false" table="document_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="validable_by_tenant" nullable="true" remarks="" size="10" type="int4"/>
+      </table>
+      <table name="event" numRows="14" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.event_id_seq1'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <child column="event_id" foreignKey="event_tags_fk" implied="false" onDeleteCascade="true" table="event_tags"/>
+            <child column="id_event" foreignKey="event_topic_fk" implied="false" onDeleteCascade="true" table="event_topic"/>
+            <child column="id" foreignKey="event_translation_fk" implied="false" onDeleteCascade="true" table="event_translation"/>
+            <child column="id" foreignKey="event_translation_prod_fk_1" implied="false" onDeleteCascade="true" table="event_translation_prod"/>
+            <child column="id_event" foreignKey="event_user_types_fk" implied="false" onDeleteCascade="true" table="event_user_types"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="link" nullable="true" remarks="" size="70" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="category" nullable="true" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="event_fk" implied="false" onDeleteCascade="false" table="event_category"/>
+         </column>
+         <column autoUpdated="false" digits="6" id="3" name="start_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="6" id="4" name="end_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="6" name="location" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="7" name="creator" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="8" name="cost" nullable="true" remarks="" size="2147483647" type="text"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="event_pk" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="event_category" numRows="5" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.event_category_id_seq1'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <child column="category" foreignKey="event_fk" implied="false" onDeleteCascade="false" table="event"/>
+            <child column="id" foreignKey="event_category_translation_fk" implied="false" onDeleteCascade="true" table="event_category_translation"/>
+            <child column="id" foreignKey="event_category_translation_prod_fk" implied="false" onDeleteCascade="true" table="event_category_translation_prod"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="icon" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="link_integration_plan" nullable="true" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="3" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="event_category_pk" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="event_category_translation" numRows="25" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="event_category_translation_fk" implied="false" onDeleteCascade="true" table="event_category"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="event_category_translation_fk_1" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="event_category" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="3" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="4" name="translationState" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="event_category_translation_original_pk_" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="event_category_translation_prod" numRows="7" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="event_category_translation_prod_fk" implied="false" onDeleteCascade="true" table="event_category"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="event_category_translation_prod_fk_1" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="event_category" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="3" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="event_category_translation_prod_original_pk_" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="event_tags" numRows="5" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.event_tags_id_seq2'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <child column="id" foreignKey="event_tags_translation_fk" implied="false" onDeleteCascade="true" table="event_tags_translation"/>
+            <child column="id" foreignKey="event_tags_translation_prod_fk" implied="false" onDeleteCascade="true" table="event_tags_translation_prod"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="event_id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="event_tags_fk" implied="false" onDeleteCascade="true" table="event"/>
+         </column>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="2" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="event_tags_pk_1" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="event_tags_translation" numRows="25" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="event_tags_translation_fk" implied="false" onDeleteCascade="true" table="event_tags"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="event_tags_translation_fk_1" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="tag" nullable="false" remarks="" size="2147483647" type="varchar"/>
+         <column autoUpdated="false" digits="6" id="3" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="4" name="translationState" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="event_tags_translation_original_pk" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="event_tags_translation_prod" numRows="0" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="event_tags_translation_prod_fk" implied="false" onDeleteCascade="true" table="event_tags"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="event_tags_translation_prod_fk_1" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="tag" nullable="false" remarks="" size="2147483647" type="varchar"/>
+         <column autoUpdated="false" digits="6" id="3" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="event_tags_translation_prod_original_pk" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="event_topic" numRows="15" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id_event" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="event_topic_fk" implied="false" onDeleteCascade="true" table="event"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="id_topic" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="event_topic_fk_1" implied="false" onDeleteCascade="true" table="topic"/>
+         </column>
+         <primaryKey column="id_event" sequenceNumberInPK="1"/>
+         <primaryKey column="id_topic" sequenceNumberInPK="2"/>
+         <index name="event_topic_original_pk" unique="true">
+            <column ascending="true" name="id_event"/>
+            <column ascending="true" name="id_topic"/>
+         </index>
+      </table>
+      <table name="event_translation" numRows="64" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="event_translation_fk" implied="false" onDeleteCascade="true" table="event"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="event_translation_fk_1" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="event" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="4" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="5" name="translationState" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="6" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="event_translation_original_pk" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="event_translation_prod" numRows="15" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.event_translation_prod_id_seq1'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <parent column="id" foreignKey="event_translation_prod_fk_1" implied="false" onDeleteCascade="true" table="event"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="event_translation_prod_fk" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="event" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="4" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="event_translation_prod_original_pk" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+         <index name="event_translation_prod_pgroonga_index" unique="false"/>
+      </table>
+      <table name="event_user_types" numRows="21" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id_event" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="event_user_types_fk" implied="false" onDeleteCascade="true" table="event"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="id_user_types" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="event_user_types_fk_1" implied="false" onDeleteCascade="true" table="user_types"/>
+         </column>
+         <primaryKey column="id_event" sequenceNumberInPK="1"/>
+         <primaryKey column="id_user_types" sequenceNumberInPK="2"/>
+         <index name="event_user_types_pk" unique="true">
+            <column ascending="true" name="id_event"/>
+            <column ascending="true" name="id_user_types"/>
+         </index>
+      </table>
+      <table name="features_flags" numRows="10" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.features_flags_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <child column="id" foreignKey="features_flags_translation_id_fkey" implied="false" onDeleteCascade="true" table="features_flags_translation"/>
+            <child column="id" foreignKey="feature_flags_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="features_flags_translation_prod"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="flag_key" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="2" name="enabled" nullable="false" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="features_flag_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="features_flags_translation" numRows="19" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="features_flags_translation_id_fkey" implied="false" onDeleteCascade="true" table="features_flags"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="features_flags_translation_lang_fkey" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="feature" nullable="true" remarks="" size="50" type="varchar"/>
+         <column autoUpdated="false" digits="6" id="3" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="4" name="translationState" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="features_flags_translation_pk" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="features_flags_translation_prod" numRows="0" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="feature_flags_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="features_flags"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="feature_flags_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="feature" nullable="true" remarks="" size="50" type="varchar"/>
+         <column autoUpdated="false" digits="6" id="3" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="feature_flags_translation_prod_pk" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="feedback" numRows="2" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.feedback_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="feedback" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="url" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="3" name="feedback_date" nullable="true" remarks="" size="13" type="date"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="feedback_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="glossary" numRows="5" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.glossary_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <child column="id" foreignKey="glossary_translation_fk" implied="false" onDeleteCascade="false" table="glossary_translation"/>
+            <child column="id" foreignKey="glossary_translation_prod_id_fkey" implied="false" onDeleteCascade="false" table="glossary_translation_prod"/>
+         </column>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="1" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="2" name="creator" nullable="true" remarks="" size="10" type="int4"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="glossary_pk" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="glossary_translation" numRows="25" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="glossary_translation_fk" implied="false" onDeleteCascade="false" table="glossary"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="glossary_translation_fk_1" implied="false" onDeleteCascade="false" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="title" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="4" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="5" name="translationState" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="6" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="glossary_translation_pk" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="glossary_translation_prod" numRows="20" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="glossary_translation_prod_id_fkey" implied="false" onDeleteCascade="false" table="glossary"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="glossary_translation_prod_lang_fkey" implied="false" onDeleteCascade="false" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="title" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="4" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="glossary_translation_prod_pk" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="individual_intervention_plan" numRows="4" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.individual_intervention_plan_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <child column="list_id" foreignKey="individual_intervention_plan_interventions_list_id_fkey" implied="false" onDeleteCascade="false" table="individual_intervention_plan_interventions"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="title" nullable="true" remarks="" size="100" type="varchar"/>
+         <column autoUpdated="false" digits="6" id="2" name="creation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="6" id="3" name="end_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="4" name="case_manager" nullable="true" remarks="" size="30" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="user_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="6" name="user_tenant" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="7" name="completed" nullable="false" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="8" name="external_id" nullable="true" remarks="" size="100" type="varchar"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="individual_intervention_plan_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="individual_intervention_plan_interventions" numRows="3" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.individual_intervention_plan_interventions_list_id_seq'::regclass)" digits="0" id="0" name="list_id" nullable="false" remarks="" size="5" type="smallserial">
+            <parent column="id" foreignKey="individual_intervention_plan_interventions_list_id_fkey" implied="false" onDeleteCascade="false" table="individual_intervention_plan"/>
+         </column>
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.individual_intervention_plan_intervention_intervention_type_seq'::regclass)" digits="0" id="1" name="intervention_type" nullable="false" remarks="" size="5" type="smallserial">
+            <parent column="id" foreignKey="individual_intervention_plan_interventions_intervention_type_fk" implied="false" onDeleteCascade="false" table="intervention_types"/>
+         </column>
+         <column autoUpdated="false" digits="6" id="2" name="validation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="3" name="completed" nullable="true" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="4" name="validating_user_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="5" name="validating_user_tenant" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="6" id="6" name="assignment_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.individual_intervention_plan_interventions_id_seq'::regclass)" digits="0" id="7" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <child column="id_intervention" foreignKey="intervention_fk" implied="false" onDeleteCascade="true" table="completed_intervention_document"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="8" name="validationrequestdate" nullable="true" remarks="" size="13" type="date"/>
+         <column autoUpdated="false" digits="0" id="9" name="title" nullable="true" remarks="" size="100" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="10" name="description" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="11" name="external_id" nullable="true" remarks="" size="100" type="varchar"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="individual_intervention_plan_interventions_pk" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="information" numRows="26" remarks="this is the generic event table for courses, news,  etc that each organization wants to publish" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.event_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <child column="information_id" foreignKey="event_tags_fk" implied="false" onDeleteCascade="false" table="information_tags"/>
+            <child column="id_information" foreignKey="event_topic_id_process_fkey" implied="false" onDeleteCascade="true" table="information_topic"/>
+            <child column="id" foreignKey="event_translation_id_fkey" implied="false" onDeleteCascade="true" table="information_translation"/>
+            <child column="id" foreignKey="event_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="information_translation_prod"/>
+            <child column="id_information" foreignKey="event_user_types_fk" implied="false" onDeleteCascade="true" table="information_user_types"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="link" nullable="true" remarks="" size="70" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="category" nullable="true" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="information_fk" implied="false" onDeleteCascade="true" table="information_category"/>
+         </column>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="3" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="4" name="creator" nullable="true" remarks="" size="10" type="int4"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="event_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="information_category" numRows="6" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.event_category_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <child column="category" foreignKey="information_fk" implied="false" onDeleteCascade="true" table="information"/>
+            <child column="id" foreignKey="event_category_translation_id_fkey" implied="false" onDeleteCascade="true" table="information_category_translation"/>
+            <child column="id" foreignKey="event_category_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="information_category_translation_prod"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="icon" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="link_integration_plan" nullable="true" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="3" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="event_category_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="information_category_translation" numRows="30" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="event_category_translation_id_fkey" implied="false" onDeleteCascade="true" table="information_category"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="event_category_translation_lang_fkey" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="information_category" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="3" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="4" name="translationState" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="information_category_translation_pk_1" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="information_category_translation_prod" numRows="8" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="event_category_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="information_category"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="event_category_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="information_category" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="3" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="event_category_translation_pk" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="information_tags" numRows="7" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.event_tags_id_seq1'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <child column="id" foreignKey="event_tags_translation_fk" implied="false" onDeleteCascade="false" table="information_tags_translation"/>
+            <child column="id" foreignKey="event_tags_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="information_tags_translation_prod"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="information_id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="event_tags_fk" implied="false" onDeleteCascade="false" table="information"/>
+         </column>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="2" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="event_tags_pk" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="information_tags_translation" numRows="35" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="event_tags_translation_fk" implied="false" onDeleteCascade="false" table="information_tags"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="event_tags_translation_fk_1" implied="false" onDeleteCascade="false" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="tag" nullable="false" remarks="" size="2147483647" type="varchar"/>
+         <column autoUpdated="false" digits="6" id="3" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="4" name="translationState" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="event_tags_translation_pk" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="information_tags_translation_prod" numRows="0" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="event_tags_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="information_tags"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="event_tags_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="tag" nullable="false" remarks="" size="2147483647" type="varchar"/>
+         <column autoUpdated="false" digits="6" id="3" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="event_tags_translation_prod_pkey" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="information_topic" numRows="25" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id_information" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="event_topic_id_process_fkey" implied="false" onDeleteCascade="true" table="information"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="id_topic" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="event_topic_id_topic_fkey" implied="false" onDeleteCascade="true" table="topic"/>
+         </column>
+         <primaryKey column="id_information" sequenceNumberInPK="1"/>
+         <primaryKey column="id_topic" sequenceNumberInPK="2"/>
+         <index name="information_topic_pk" unique="true">
+            <column ascending="true" name="id_information"/>
+            <column ascending="true" name="id_topic"/>
+         </index>
+      </table>
+      <table name="information_translation" numRows="118" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="event_translation_id_fkey" implied="false" onDeleteCascade="true" table="information"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="event_translation_lang_fkey" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="information" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="4" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="5" name="translationState" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="6" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="information_translation_pk_1" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="information_translation_prod" numRows="10" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="event_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="information"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="event_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="information" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="4" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="information_translation_prod_pk" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+         <index name="information_translation_prod_pgroonga_index" unique="false"/>
+      </table>
+      <table name="information_user_types" numRows="45" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id_information" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="event_user_types_fk" implied="false" onDeleteCascade="true" table="information"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="id_user_types" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="event_user_types_fk_1" implied="false" onDeleteCascade="true" table="user_types"/>
+         </column>
+         <primaryKey column="id_information" sequenceNumberInPK="1"/>
+         <primaryKey column="id_user_types" sequenceNumberInPK="2"/>
+         <index name="information_user_types_pk" unique="true">
+            <column ascending="true" name="id_information"/>
+            <column ascending="true" name="id_user_types"/>
+         </index>
+      </table>
+      <table name="intervention_category" numRows="3" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.intervention_category_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <child column="id" foreignKey="intervention_category_id_translation_fk" implied="false" onDeleteCascade="false" table="intervention_category_translation"/>
+            <child column="id" foreignKey="intervention_category_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="intervention_category_translation_prod"/>
+            <child column="category_type" foreignKey="intervention_types_fk" implied="false" onDeleteCascade="false" table="intervention_types"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="external_id" nullable="true" remarks="" size="100" type="varchar"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="2" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="intervention_category_pk" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="intervention_category_translation" numRows="15" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="intervention_category_id_translation_fk" implied="false" onDeleteCascade="false" table="intervention_category"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="intervention_category_translation_fk" implied="false" onDeleteCascade="false" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="title" nullable="true" remarks="" size="250" type="varchar"/>
+         <column autoUpdated="false" digits="6" id="3" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="4" name="translationState" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="intervention_category_translation_pk" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="intervention_category_translation_prod" numRows="4" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="intervention_category_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="intervention_category"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="intervention_category_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="title" nullable="true" remarks="" size="250" type="varchar"/>
+         <column autoUpdated="false" digits="6" id="3" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="intervention_category_translation_prod_pk" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="intervention_processes" numRows="2" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.intervention_processes_intervention_type_seq'::regclass)" digits="0" id="0" name="intervention_type" nullable="false" remarks="" size="5" type="smallserial">
+            <parent column="id" foreignKey="intervention_processes_intervention_type_fkey" implied="false" onDeleteCascade="false" table="intervention_types"/>
+         </column>
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.intervention_processes_process_id_seq'::regclass)" digits="0" id="1" name="process_id" nullable="false" remarks="" size="5" type="smallserial">
+            <parent column="id" foreignKey="intervention_processes_process_id_fkey" implied="false" onDeleteCascade="false" table="process"/>
+         </column>
+      </table>
+      <table name="intervention_type_validator" numRows="5" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="tenant_id" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="intervention_type_id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="intervention_type_validator_fk" implied="false" onDeleteCascade="false" table="intervention_types"/>
+         </column>
+         <primaryKey column="tenant_id" sequenceNumberInPK="1"/>
+         <primaryKey column="intervention_type_id" sequenceNumberInPK="2"/>
+         <index name="intervention_type_validator_pk" unique="true">
+            <column ascending="true" name="tenant_id"/>
+            <column ascending="true" name="intervention_type_id"/>
+         </index>
+      </table>
+      <table name="intervention_types" numRows="5" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.intervention_types_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <child column="intervention_type" foreignKey="individual_intervention_plan_interventions_intervention_type_fk" implied="false" onDeleteCascade="false" table="individual_intervention_plan_interventions"/>
+            <child column="intervention_type" foreignKey="intervention_processes_intervention_type_fkey" implied="false" onDeleteCascade="false" table="intervention_processes"/>
+            <child column="intervention_type_id" foreignKey="intervention_type_validator_fk" implied="false" onDeleteCascade="false" table="intervention_type_validator"/>
+            <child column="id" foreignKey="intervention_types_translation_id_fkey" implied="false" onDeleteCascade="true" table="intervention_types_translation"/>
+            <child column="id" foreignKey="intervention_types_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="intervention_types_translation_prod"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="category_type" nullable="true" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="intervention_types_fk" implied="false" onDeleteCascade="false" table="intervention_category"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="external_id" nullable="true" remarks="" size="100" type="varchar"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="3" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="intervention_types_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="intervention_types_translation" numRows="25" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="intervention_types_translation_id_fkey" implied="false" onDeleteCascade="true" table="intervention_types"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="intervention_types_translation_lang_fkey" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="intervention_title" nullable="true" remarks="" size="250" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="4" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="5" name="translationState" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="6" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="intervention_types_translation_pk" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="intervention_types_translation_prod" numRows="7" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="intervention_types_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="intervention_types"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="intervention_types_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="intervention_title" nullable="true" remarks="" size="250" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="4" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="intervention_types_translation_prod_pk" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="languages" numRows="5" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <child column="lang" foreignKey="comment_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="comment_translation_prod"/>
+            <child column="lang" foreignKey="comment_translation_lang_fkey" implied="false" onDeleteCascade="false" table="comments_translation"/>
+            <child column="lang" foreignKey="document_type_translation_lang_fkey" implied="false" onDeleteCascade="true" table="document_type_translation"/>
+            <child column="lang" foreignKey="document_type_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="document_type_translation_prod"/>
+            <child column="lang" foreignKey="event_category_translation_fk_1" implied="false" onDeleteCascade="true" table="event_category_translation"/>
+            <child column="lang" foreignKey="event_category_translation_prod_fk_1" implied="false" onDeleteCascade="true" table="event_category_translation_prod"/>
+            <child column="lang" foreignKey="event_tags_translation_fk_1" implied="false" onDeleteCascade="true" table="event_tags_translation"/>
+            <child column="lang" foreignKey="event_tags_translation_prod_fk_1" implied="false" onDeleteCascade="true" table="event_tags_translation_prod"/>
+            <child column="lang" foreignKey="event_translation_fk_1" implied="false" onDeleteCascade="true" table="event_translation"/>
+            <child column="lang" foreignKey="event_translation_prod_fk" implied="false" onDeleteCascade="true" table="event_translation_prod"/>
+            <child column="lang" foreignKey="features_flags_translation_lang_fkey" implied="false" onDeleteCascade="true" table="features_flags_translation"/>
+            <child column="lang" foreignKey="feature_flags_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="features_flags_translation_prod"/>
+            <child column="lang" foreignKey="glossary_translation_fk_1" implied="false" onDeleteCascade="false" table="glossary_translation"/>
+            <child column="lang" foreignKey="glossary_translation_prod_lang_fkey" implied="false" onDeleteCascade="false" table="glossary_translation_prod"/>
+            <child column="lang" foreignKey="event_category_translation_lang_fkey" implied="false" onDeleteCascade="true" table="information_category_translation"/>
+            <child column="lang" foreignKey="event_category_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="information_category_translation_prod"/>
+            <child column="lang" foreignKey="event_tags_translation_fk_1" implied="false" onDeleteCascade="false" table="information_tags_translation"/>
+            <child column="lang" foreignKey="event_tags_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="information_tags_translation_prod"/>
+            <child column="lang" foreignKey="event_translation_lang_fkey" implied="false" onDeleteCascade="true" table="information_translation"/>
+            <child column="lang" foreignKey="event_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="information_translation_prod"/>
+            <child column="lang" foreignKey="intervention_category_translation_fk" implied="false" onDeleteCascade="false" table="intervention_category_translation"/>
+            <child column="lang" foreignKey="intervention_category_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="intervention_category_translation_prod"/>
+            <child column="lang" foreignKey="intervention_types_translation_lang_fkey" implied="false" onDeleteCascade="true" table="intervention_types_translation"/>
+            <child column="lang" foreignKey="intervention_types_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="intervention_types_translation_prod"/>
+            <child column="lang" foreignKey="picture_hotspot_translation_fk_1" implied="false" onDeleteCascade="true" table="picture_hotspot_translation"/>
+            <child column="lang" foreignKey="picture_hotspot_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="picture_hotspot_translation_prod"/>
+            <child column="lang" foreignKey="process_translation_lang_fkey" implied="false" onDeleteCascade="true" table="process_translation"/>
+            <child column="lang" foreignKey="process_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="process_translation_prod"/>
+            <child column="lang" foreignKey="step_link_translation_fk" implied="false" onDeleteCascade="false" table="step_link_translation"/>
+            <child column="lang" foreignKey="step_link_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="step_link_translation_prod"/>
+            <child column="lang" foreignKey="step_translation_lang_fkey" implied="false" onDeleteCascade="true" table="step_translation"/>
+            <child column="lang" foreignKey="step_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="step_translation_prod"/>
+            <child column="lang" foreignKey="lang_fk" implied="false" onDeleteCascade="false" table="t_settings_translation"/>
+            <child column="lang" foreignKey="lang_fk" implied="false" onDeleteCascade="false" table="t_settings_translation_prod"/>
+            <child column="lang" foreignKey="topic_translation_lang_fkey" implied="false" onDeleteCascade="true" table="topic_translation"/>
+            <child column="lang" foreignKey="topic_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="topic_translation_prod"/>
+            <child column="lang" foreignKey="user_types_translation_lang_fkey" implied="false" onDeleteCascade="true" table="user_types_translation"/>
+            <child column="lang" foreignKey="user_type_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="user_types_translation_prod"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="iso_code" nullable="true" remarks="" size="10" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="name" nullable="true" remarks="" size="25" type="varchar"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="3" name="active" nullable="false" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="4" name="is_default" nullable="false" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="5" name="voice_string" nullable="true" remarks="" size="50" type="varchar"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="6" name="voice_active" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="lang" sequenceNumberInPK="1"/>
+         <index name="languages_pkey" unique="true">
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="migrant_app_config" numRows="1" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="features" nullable="true" remarks="" size="2147483647" type="json"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="migrant_app_config_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="mixed_icons" numRows="11" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="int4">
+            <child column="step_icon" foreignKey="step_icon_fk" implied="false" onDeleteCascade="false" table="step"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="icon" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="related_entity" nullable="true" remarks="" size="10" type="int4"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="step_icon_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="picture_hotspot" numRows="4" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.picture_hotspot_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <child column="pht_id" foreignKey="picture_hotspot_translation_fk" implied="false" onDeleteCascade="false" table="picture_hotspot_translation"/>
+            <child column="pht_id" foreignKey="picture_hotspot_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="picture_hotspot_translation_prod"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="x" nullable="true" remarks="" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="2" name="y" nullable="true" remarks="" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="3" name="picture_id" nullable="true" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="picture_hotspot_fk" implied="false" onDeleteCascade="false" table="document_type_picture"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="picture_hotspot_pk" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="picture_hotspot_translation" numRows="20" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="pht_id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="picture_hotspot_translation_fk" implied="false" onDeleteCascade="false" table="picture_hotspot"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="picture_hotspot_translation_fk_1" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="title" nullable="true" remarks="" size="250" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="message" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="4" name="translationState" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="pht_id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="picture_hotspot_translation_pk" unique="true">
+            <column ascending="true" name="pht_id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="picture_hotspot_translation_prod" numRows="7" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="pht_id" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="picture_hotspot_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="picture_hotspot"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="picture_hotspot_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="title" nullable="true" remarks="" size="250" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="message" nullable="true" remarks="" size="2147483647" type="text"/>
+         <primaryKey column="pht_id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="picture_hotspot_translation_prod_pk" unique="true">
+            <column ascending="true" name="pht_id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="process" numRows="21" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.process_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <child column="process_id" foreignKey="intervention_processes_process_id_fkey" implied="false" onDeleteCascade="false" table="intervention_processes"/>
+            <child column="idprocess" foreignKey="id_process_fkey" implied="false" onDeleteCascade="false" table="process_comments"/>
+            <child column="id_process" foreignKey="to_process_fk" implied="false" onDeleteCascade="true" table="process_produced_documents"/>
+            <child column="id_process" foreignKey="process_topic_id_process_fkey" implied="false" onDeleteCascade="true" table="process_topic"/>
+            <child column="id" foreignKey="process_translation_id_fkey" implied="false" onDeleteCascade="true" table="process_translation"/>
+            <child column="id" foreignKey="process_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="process_translation_prod"/>
+            <child column="id_process" foreignKey="process_users_id_process_fkey" implied="false" onDeleteCascade="true" table="process_users"/>
+            <child column="id_process" foreignKey="step_id_process_fkey" implied="false" onDeleteCascade="true" table="step"/>
+            <child column="id_process" foreignKey="step_link_fk" implied="false" onDeleteCascade="false" table="step_link"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="link" nullable="true" remarks="" size="70" type="varchar"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="2" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="3" name="published_date" nullable="true" remarks="" size="13" type="date"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="process_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="process_comments" numRows="5" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="idcomment" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="id_comment_fkey" implied="false" onDeleteCascade="true" table="comments"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="idprocess" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="id_process_fkey" implied="false" onDeleteCascade="false" table="process"/>
+         </column>
+         <primaryKey column="idcomment" sequenceNumberInPK="1"/>
+         <primaryKey column="idprocess" sequenceNumberInPK="2"/>
+         <index name="process_comment_pkey" unique="true">
+            <column ascending="true" name="idcomment"/>
+            <column ascending="true" name="idprocess"/>
+         </index>
+      </table>
+      <table name="process_produced_documents" numRows="17" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id_process" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="to_process_fk" implied="false" onDeleteCascade="true" table="process"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="id_document" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="to_docs_fk" implied="false" onDeleteCascade="true" table="document_type"/>
+         </column>
+         <primaryKey column="id_process" sequenceNumberInPK="1"/>
+         <primaryKey column="id_document" sequenceNumberInPK="2"/>
+         <index name="produced_docs_pk" unique="true">
+            <column ascending="true" name="id_process"/>
+            <column ascending="true" name="id_document"/>
+         </index>
+      </table>
+      <table name="process_topic" numRows="32" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.process_topic_id_process_seq'::regclass)" digits="0" id="0" name="id_process" nullable="false" remarks="" size="5" type="smallserial">
+            <parent column="id" foreignKey="process_topic_id_process_fkey" implied="false" onDeleteCascade="true" table="process"/>
+         </column>
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.process_topic_id_topic_seq'::regclass)" digits="0" id="1" name="id_topic" nullable="false" remarks="" size="5" type="smallserial">
+            <parent column="id" foreignKey="process_topic_id_topic_fkey" implied="false" onDeleteCascade="true" table="topic"/>
+         </column>
+         <primaryKey column="id_process" sequenceNumberInPK="1"/>
+         <primaryKey column="id_topic" sequenceNumberInPK="2"/>
+         <index name="process_topic_pk" unique="true">
+            <column ascending="true" name="id_process"/>
+            <column ascending="true" name="id_topic"/>
+         </index>
+      </table>
+      <table name="process_translation" numRows="105" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.process_translation_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <parent column="id" foreignKey="process_translation_id_fkey" implied="false" onDeleteCascade="true" table="process"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="process_translation_lang_fkey" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="process" nullable="true" remarks="" size="250" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="4" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="5" name="translationState" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="6" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="process_translation_pk" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="process_translation_prod" numRows="18" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.process_translation_prod_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <parent column="id" foreignKey="process_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="process"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="process_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="process" nullable="true" remarks="" size="250" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="4" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="process_translation_prod_pk" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+         <index name="process_translation_prod_pgroonga_index" unique="false"/>
+      </table>
+      <table name="process_users" numRows="37" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.process_users_id_process_seq'::regclass)" digits="0" id="0" name="id_process" nullable="false" remarks="" size="5" type="smallserial">
+            <parent column="id" foreignKey="process_users_id_process_fkey" implied="false" onDeleteCascade="true" table="process"/>
+         </column>
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.process_users_id_user_types_seq'::regclass)" digits="0" id="1" name="id_user_types" nullable="false" remarks="" size="5" type="smallserial">
+            <parent column="id" foreignKey="process_users_id_user_types_fkey" implied="false" onDeleteCascade="true" table="user_types"/>
+         </column>
+         <primaryKey column="id_process" sequenceNumberInPK="1"/>
+         <primaryKey column="id_user_types" sequenceNumberInPK="2"/>
+         <index name="process_users_pk" unique="true">
+            <column ascending="true" name="id_process"/>
+            <column ascending="true" name="id_user_types"/>
+         </index>
+      </table>
+      <table name="rasa" numRows="0" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.rasa_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="file" nullable="true" remarks="" size="70" type="bpchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="active" nullable="true" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="3" name="traindata" nullable="true" remarks="" size="13" type="date"/>
+         <column autoUpdated="false" digits="0" id="4" name="trainresult" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="5" name="trainmessage" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="6" name="lang" nullable="true" remarks="" size="10" type="bpchar"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="rasa_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="ratings" numRows="4" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="user_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="user_tenant" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.ratings_content_id_seq'::regclass)" digits="0" id="2" name="content_id" nullable="false" remarks="" size="5" type="smallserial"/>
+         <column autoUpdated="false" digits="0" id="3" name="content_type" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="value" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.ratings_id_seq'::regclass)" digits="0" id="5" name="id" nullable="false" remarks="" size="5" type="smallserial"/>
+         <column autoUpdated="false" defaultValue="CURRENT_DATE" digits="0" id="6" name="date" nullable="true" remarks="" size="13" type="date"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="ratings_pk_1" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="settings" numRows="9" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="key" nullable="false" remarks="" size="2147483647" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="value" nullable="true" remarks="" size="2147483647" type="text"/>
+         <primaryKey column="key" sequenceNumberInPK="1"/>
+         <index name="settings_pk" unique="true">
+            <column ascending="true" name="key"/>
+         </index>
+      </table>
+      <table name="step" numRows="71" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <child column="id_step" foreignKey="step_document_fk" implied="false" onDeleteCascade="false" table="step_document"/>
+            <child column="from_step" foreignKey="step_link_from_fk" implied="false" onDeleteCascade="false" table="step_link"/>
+            <child column="to_step" foreignKey="step_link_to_fk" implied="false" onDeleteCascade="false" table="step_link"/>
+            <child column="id" foreignKey="step_translation_fk" implied="false" onDeleteCascade="false" table="step_translation"/>
+            <child column="id" foreignKey="step_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="step_translation_prod"/>
+         </column>
+         <column autoUpdated="false" digits="8" id="1" name="cost" nullable="true" remarks="" size="8" type="float4"/>
+         <column autoUpdated="false" digits="0" id="2" name="location_specific" nullable="true" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="3" name="location" nullable="true" remarks="" size="100" type="varchar"/>
+         <column autoUpdated="false" digits="8" id="4" name="location_lon" nullable="true" remarks="" size="8" type="float4"/>
+         <column autoUpdated="false" digits="8" id="5" name="location_lat" nullable="true" remarks="" size="8" type="float4"/>
+         <column autoUpdated="false" digits="0" id="6" name="id_process" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="step_id_process_fkey" implied="false" onDeleteCascade="true" table="process"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="7" name="link" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="8" name="step_icon" nullable="true" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="step_icon_fk" implied="false" onDeleteCascade="false" table="mixed_icons"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="step_pk" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="step_document" numRows="19" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id_document" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="step_document_id_document_fkey" implied="false" onDeleteCascade="true" table="document_type"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="is_out" nullable="false" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="2" name="id_step" nullable="false" remarks="" size="2147483647" type="uuid">
+            <parent column="id" foreignKey="step_document_fk" implied="false" onDeleteCascade="false" table="step"/>
+         </column>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="3" name="cost" nullable="true" remarks="" size="131089" type="numeric"/>
+         <primaryKey column="id_document" sequenceNumberInPK="1"/>
+         <primaryKey column="id_step" sequenceNumberInPK="2"/>
+         <index name="step_document_pk" unique="true">
+            <column ascending="true" name="id_document"/>
+            <column ascending="true" name="id_step"/>
+         </index>
+      </table>
+      <table name="step_link" numRows="50" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <child column="id" foreignKey="step_link_translation_step_fk" implied="false" onDeleteCascade="false" table="step_link_translation"/>
+            <child column="id" foreignKey="step_link_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="step_link_translation_prod"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="from_step" nullable="false" remarks="" size="2147483647" type="uuid">
+            <parent column="id" foreignKey="step_link_from_fk" implied="false" onDeleteCascade="false" table="step"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="to_step" nullable="false" remarks="" size="2147483647" type="uuid">
+            <parent column="id" foreignKey="step_link_to_fk" implied="false" onDeleteCascade="false" table="step"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="id_process" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="step_link_fk" implied="false" onDeleteCascade="false" table="process"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="step_link_pk" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="step_link_translation" numRows="250" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="step_link_translation_fk" implied="false" onDeleteCascade="false" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="description" nullable="true" remarks="" size="250" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <parent column="id" foreignKey="step_link_translation_step_fk" implied="false" onDeleteCascade="false" table="step_link"/>
+         </column>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="3" name="translationState" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="4" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="lang" sequenceNumberInPK="1"/>
+         <primaryKey column="id" sequenceNumberInPK="2"/>
+         <index name="step_link_translation_pk" unique="true">
+            <column ascending="true" name="lang"/>
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="step_link_translation_prod" numRows="0" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="step_link_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="description" nullable="true" remarks="" size="250" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <parent column="id" foreignKey="step_link_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="step_link"/>
+         </column>
+         <primaryKey column="lang" sequenceNumberInPK="1"/>
+         <primaryKey column="id" sequenceNumberInPK="2"/>
+         <index name="step_link_translation_prod_pk" unique="true">
+            <column ascending="true" name="lang"/>
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="step_translation" numRows="350" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="step_translation_lang_fkey" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="step" nullable="true" remarks="" size="250" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="description" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="3" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="4" name="id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <parent column="id" foreignKey="step_translation_fk" implied="false" onDeleteCascade="false" table="step"/>
+         </column>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="5" name="translationState" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="6" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="step_translation_pk" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="step_translation_prod" numRows="118" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="step_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="step" nullable="true" remarks="" size="250" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="description" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="3" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="4" name="id" nullable="false" remarks="" size="2147483647" type="uuid">
+            <parent column="id" foreignKey="step_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="step"/>
+         </column>
+         <primaryKey column="lang" sequenceNumberInPK="1"/>
+         <primaryKey column="id" sequenceNumberInPK="2"/>
+         <index name="step_translation_prod_pk" unique="true">
+            <column ascending="true" name="lang"/>
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="survey" numRows="0" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="int4">
+            <child column="id_survey" foreignKey="survey_fk" implied="false" onDeleteCascade="false" table="survey_answers"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="survey" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="active" nullable="true" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="3" name="activation_date" nullable="true" remarks="" size="13" type="date"/>
+         <column autoUpdated="false" digits="0" id="4" name="expiry_date" nullable="true" remarks="" size="13" type="date"/>
+         <column autoUpdated="false" digits="0" id="5" name="title" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="6" name="destination_app" nullable="true" remarks="" size="10" type="int4"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="survey_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="survey_answers" numRows="0" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id_answer" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="id_survey" nullable="true" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="survey_fk" implied="false" onDeleteCascade="false" table="survey"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="id_user" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="3" name="answer" nullable="true" remarks="" size="2147483647" type="jsonb"/>
+         <column autoUpdated="false" digits="0" id="4" name="answer_date" nullable="true" remarks="" size="13" type="date"/>
+         <primaryKey column="id_answer" sequenceNumberInPK="1"/>
+         <index name="survey_answers_pkey" unique="true">
+            <column ascending="true" name="id_answer"/>
+         </index>
+         <index name="gin_survey_answer" unique="false">
+            <column ascending="true" name="answer"/>
+         </index>
+      </table>
+      <table name="t_settings" numRows="0" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="int4">
+            <child column="id" foreignKey="t_setting_fk" implied="false" onDeleteCascade="false" table="t_settings_translation"/>
+            <child column="id" foreignKey="t_setting_fk" implied="false" onDeleteCascade="false" table="t_settings_translation_prod"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="key" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="t_settings_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="t_settings_translation" numRows="0" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="t_setting_fk" implied="false" onDeleteCascade="false" table="t_settings"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="value" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="translationState" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="3" name="lang" nullable="true" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="lang_fk" implied="false" onDeleteCascade="false" table="languages"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="t_settings_translation_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="t_settings_translation_prod" numRows="0" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="t_setting_fk" implied="false" onDeleteCascade="false" table="t_settings"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="true" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="lang_fk" implied="false" onDeleteCascade="false" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="value" nullable="true" remarks="" size="2147483647" type="text"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="t_settings_translation_prod_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="tenant" numRows="4" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="1" name="name" nullable="true" remarks="" size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="link" nullable="true" remarks="" size="70" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="email" nullable="true" remarks="" size="100" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="address" nullable="true" remarks="" size="100" type="varchar"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="tenant_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="topic" numRows="7" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.topic_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <child column="id_topic" foreignKey="event_topic_fk_1" implied="false" onDeleteCascade="true" table="event_topic"/>
+            <child column="id_topic" foreignKey="event_topic_id_topic_fkey" implied="false" onDeleteCascade="true" table="information_topic"/>
+            <child column="id_topic" foreignKey="process_topic_id_topic_fkey" implied="false" onDeleteCascade="true" table="process_topic"/>
+            <child column="id" foreignKey="topic_translation_id_fkey" implied="false" onDeleteCascade="true" table="topic_translation"/>
+            <child column="id" foreignKey="topic_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="topic_translation_prod"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="icon" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="2" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="3" name="father" nullable="true" remarks="" size="10" type="int4"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="topic_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="topic_translation" numRows="35" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.topic_translation_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <parent column="id" foreignKey="topic_translation_id_fkey" implied="false" onDeleteCascade="true" table="topic"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="topic_translation_lang_fkey" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="topic" nullable="true" remarks="" size="250" type="varchar"/>
+         <column autoUpdated="false" digits="6" id="3" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="4" name="translationState" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="topic_translation_pk" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="topic_translation_prod" numRows="9" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.topic_translation_prod_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <parent column="id" foreignKey="topic_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="topic"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="topic_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="topic" nullable="true" remarks="" size="250" type="varchar"/>
+         <column autoUpdated="false" digits="6" id="3" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="topic_translations_prod_pk" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="user_consent" numRows="4" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id_user" nullable="false" remarks="" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="1" name="consent" nullable="true" remarks="" size="2147483647" type="text"/>
+         <primaryKey column="id_user" sequenceNumberInPK="1"/>
+         <index name="user_consent_pkey" unique="true">
+            <column ascending="true" name="id_user"/>
+         </index>
+      </table>
+      <table name="user_pictures" numRows="5" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.user_pic_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial"/>
+         <column autoUpdated="false" digits="0" id="1" name="picture" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="user_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="3" name="tenant_id" nullable="true" remarks="" size="10" type="int4"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="user_picture_pk" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="user_preferences" numRows="5" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id_user" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="id_user_type" nullable="false" remarks="" size="5" type="int2">
+            <parent column="id" foreignKey="user_type_fk" implied="false" onDeleteCascade="false" table="user_types"/>
+         </column>
+         <primaryKey column="id_user" sequenceNumberInPK="1"/>
+         <primaryKey column="id_user_type" sequenceNumberInPK="2"/>
+         <index name="user_preferences_pkey" unique="true">
+            <column ascending="true" name="id_user"/>
+            <column ascending="true" name="id_user_type"/>
+         </index>
+      </table>
+      <table name="user_types" numRows="7" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.user_types_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <child column="id_user_types" foreignKey="event_user_types_fk_1" implied="false" onDeleteCascade="true" table="event_user_types"/>
+            <child column="id_user_types" foreignKey="event_user_types_fk_1" implied="false" onDeleteCascade="true" table="information_user_types"/>
+            <child column="id_user_types" foreignKey="process_users_id_user_types_fkey" implied="false" onDeleteCascade="true" table="process_users"/>
+            <child column="id_user_type" foreignKey="user_type_fk" implied="false" onDeleteCascade="false" table="user_preferences"/>
+            <child column="id" foreignKey="user_types_translation_id_fkey" implied="false" onDeleteCascade="true" table="user_types_translation"/>
+            <child column="id" foreignKey="user_type_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="user_types_translation_prod"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="icon" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="2" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="user_types_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="user_types_translation" numRows="35" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.user_types_translation_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <parent column="id" foreignKey="user_types_translation_id_fkey" implied="false" onDeleteCascade="true" table="user_types"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="user_types_translation_lang_fkey" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="user_type" nullable="true" remarks="" size="250" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="4" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="5" name="translationState" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="6" name="published" nullable="true" remarks="" size="1" type="bool"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="user_types_translation_pk" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+      <table name="user_types_translation_prod" numRows="9" remarks="" schema="micadoapp" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('micadoapp.user_types_translation_prod_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial">
+            <parent column="id" foreignKey="user_type_translation_prod_id_fkey" implied="false" onDeleteCascade="true" table="user_types"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="lang" nullable="false" remarks="" size="10" type="varchar">
+            <parent column="lang" foreignKey="user_type_translation_prod_lang_fkey" implied="false" onDeleteCascade="true" table="languages"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="user_type" nullable="true" remarks="" size="250" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="description" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="4" name="translation_date" nullable="true" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="lang" sequenceNumberInPK="2"/>
+         <index name="user_type_translation_prod_pk" unique="true">
+            <column ascending="true" name="id"/>
+            <column ascending="true" name="lang"/>
+         </index>
+      </table>
+   </tables>
+</database>
