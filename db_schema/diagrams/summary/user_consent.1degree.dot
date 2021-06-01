@@ -1,0 +1,31 @@
+// dot 2.30.1 on Linux 3.10.0-1127.19.1.el7.x86_64
+// SchemaSpy rev 590
+digraph "user_consent" {
+  graph [
+    rankdir="RL"
+    bgcolor="#f7f7f7"
+    nodesep="0.18"
+    ranksep="0.46"
+    fontname="Helvetica"
+    fontsize="11"
+  ];
+  node [
+    fontname="Helvetica"
+    fontsize="11"
+    shape="plaintext"
+  ];
+  edge [
+    arrowsize="0.8"
+  ];
+  "user_consent" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">user_consent</TD></TR>
+      <TR><TD PORT="id_user" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id_user</TD></TR>
+      <TR><TD PORT="consent" COLSPAN="3" ALIGN="LEFT">consent</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">4 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="tables/user_consent.html"
+    tooltip="user_consent"
+  ];
+}
